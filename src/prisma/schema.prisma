@@ -1,0 +1,57 @@
+// Prisma schema. Docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+  output          = "../.prisma/generated"
+}
+
+enum Status {
+  AWAITING
+  FINISHED
+}
+
+model Phase {
+  id Int @id @default(autoincrement())
+
+  previousPhase   Phase?  @relation("previousPhase", fields: [previousPhaseId], references: [id])
+  previousPhaseId Int?
+  previousPhases_ Phase[] @relation("previousPhase")
+
+  nextPhase   Phase?  @relation("nextPhase", fields: [nextPhaseId], references: [id])
+  nextPhaseId Int?
+  nextPhases_ Phase[] @relation("nextPhase")
+
+  tasks_ Task[]
+
+  name String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+
+  phase   Phase @relation(fields: [phaseId], references: [id])
+  phaseId Int
+
+  previousTask   Task?  @relation("previousTask", fields: [previousTaskId], references: [id])
+  previousTaskId Int?
+  previousTasks_ Task[] @relation("previousTask")
+
+  nextTask   Task?  @relation("nextTask", fields: [nextTaskId], references: [id])
+  nextTaskId Int?
+  nextTasks_ Task[] @relation("nextTask")
+
+  status Status
+  title  String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
