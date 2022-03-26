@@ -15,3 +15,5 @@ npm start
 
 * Apollo Studio Explorer Collections (choose "Operation Collection" in left corner menu)
 https://studio.apollographql.com/public/Task-Manager-y8pic4/explorer?variant=current
+
+![alt text](https://github.com/DmitryBara/task-manager/tree/master/data/apollo-explorer.png?raw=true)
